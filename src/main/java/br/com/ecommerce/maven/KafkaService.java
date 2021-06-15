@@ -1,5 +1,6 @@
 package br.com.ecommerce.maven;
 
+import java.io.Closeable;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
@@ -10,7 +11,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-class KafkaService<T> {
+class KafkaService<T> implements Closeable{
 
 	private final KafkaConsumer<String, String> consumer;
 	private final ConsumerFunction parse;
@@ -62,6 +63,11 @@ class KafkaService<T> {
 		properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
 
 		return properties;
+	}
+
+	@Override
+	public void close(){
+		consumer.close();		
 	}
 
 }

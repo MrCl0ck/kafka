@@ -8,8 +8,9 @@ public class LogService {
 	public static void main(String[] args) {
 		var logService = new LogService();
 		var pattern = Pattern.compile("ECOMMERCE.*");
-		var service = new KafkaService<>(LogService.class.getSimpleName(), pattern, logService::parse);
-		service.run();
+		try(var service = new KafkaService<>(LogService.class.getSimpleName(), pattern, logService::parse)){
+			service.run();
+		}
 	}
 	
 	private void parse(ConsumerRecord<String, String> record) {
